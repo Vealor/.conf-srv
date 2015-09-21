@@ -3,6 +3,8 @@
 alias changealias="vim ~/.bash_aliases"
 alias shut="sudo shutdown -h 0"
 
+#networking
+alias myip="curl ipecho.net/plain ; echo"
 
 #custome aliases
 alias c="clear"
