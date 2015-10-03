@@ -1,7 +1,7 @@
 #######=== CUSTOM ALIASES ===#######
 #to open alias listing
 alias changealias="vim ~/.bash_aliases"
-alias shut="sudo shutdown -h 0"
+alias shut="sudo shutdown -h now"
 
 #networking
 alias myip="curl ipecho.net/plain ; echo"
