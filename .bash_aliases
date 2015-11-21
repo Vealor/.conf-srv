@@ -17,4 +17,3 @@ alias ts3="sh /home/jakobr/Voip/TeamSpeak3-Client-linux_x86/ts3client_runscript.
 
 #LFS Startup
 alias LFS_start="bash /home/jakobr/Documents/LFS-Stuff/LFS_start.sh"
-

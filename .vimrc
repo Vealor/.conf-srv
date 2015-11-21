@@ -8,7 +8,7 @@ filetype plugin indent on
 au FileType py set autoindent
 au FileType py set smartindent
 
-set tabstop=4
-set shiftwidth=4
+set tabstop=2
+set shiftwidth=2
 set expandtab
 

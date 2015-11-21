@@ -1,7 +1,7 @@
 ########## Variables
 dir=~/.dotfiles                    # dotfiles directory
 olddir=~/.dotfiles_old             # old dotfiles backup directory
-files=".gitconfig .bashrc .bash_aliases .tmux.conf .vim .vimrc"        # list of files/folders to symlink in homedir 
+files=".gitconfig .bashrc .bash_aliases .tmux.conf .vimrc"        # list of files/folders to symlink in homedir 
 ##########
 
  
