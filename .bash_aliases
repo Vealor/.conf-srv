@@ -14,3 +14,5 @@ alias audit="echo adtdepchk - Dependency checker && echo adttmpcln -  Auditor te
 
 #git commit on external machine
 alias vealcommit="git -c user.name='Vealor' -c user.email='jakob.m.roberts@gmail.com' commit --verbose"
+#git log graph
+alias ggraph="-git log --graph --oneline --decorate --color --all"
