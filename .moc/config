@@ -224,7 +224,7 @@ Theme = transparent-background
 #
 # Example:    XTermTheme = transparent-background
 #
-TermTheme = transparent-background
+XTermTheme = transparent-background
 
 # Should MOC try to autoload the default lyrics file for an audio?  (The
 # default lyrics file is a text file with the same file name as the audio
