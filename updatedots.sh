@@ -187,10 +187,15 @@ if [ "$MODE" == "create" ]; then
   else
     mv ./dotfiles $DIR
   fi
-  echo -e "create" #replace with main create function
+  # create backup directory
+  makeolddir
+  # main create function
+  create
 elif [ "$MODE" == "restore" ]; then
+  #test if the olddir already exists to prevent overwrite
   if test -e $OLDDIR; then
-    echo -e "restore" #replace with main restore function
+    # main restore function
+    restore
   else
     echo -e "$FAIL\tOld dotfile directory does not exist or match!"
   fi
