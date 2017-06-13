@@ -130,10 +130,7 @@ function create {
   local OUT=""
 
   # create symlinks for new dotfiles in DIR
-  # 3 seconds to complete
-  (sleep 3) &
-  local PID=$!
-  local TEXT="Creating symlink to $FILE in home directory."
+  local TEXT="Creating symlink to Files in home directory."
   for FILE in $FILES; do
       local OUT="-$(ln -s $DIR/$FILE ~/$FILE &)"
       spinny $! $FILE 1
@@ -149,6 +146,63 @@ function create {
   done
 }
 ################################################################################
+# creates symlinks for dotfiles
+function restore {
+
+  # move existing dotfiles in DIR to OLDDIR directory
+  local TEXT="Deleting symlinks in home directory."
+  echo -e "[||||]\t$TEXT"
+  for FILE in $FILES; do
+    if test -h $FILE; then
+      local OUT="-$(rm ~/$FILE &)"
+      spinny $! $FILE 1
+      #display good/pass/fail output
+      if [[ $OUT == *No\ such* ]]; then #if a file doesn't exist
+        echo -e "     $FAIL\t$FILE"
+      elif [[ $OUT == *[!\ ]* ]]; then #only hyphen
+        echo -e "     $GOOD\t$FILET"
+      else #any other output that contains a space
+        echo -e "     $FAIL\t$FILE"
+        exit 1
+      fi
+    fi
+  done
+
+  #reset output var
+  local OUT=""
+
+  #restores old system dotfiles
+  local TEXT="Restoring old dotfiles from $OLDDIR"
+  echo -e "[||||]\t$TEXT"
+  for FILE in $FILES; do
+      local OUT="-$(mv ~/.dotfiles_old/ ~/$FILE &)"
+      spinny $! $FILE 1
+      #display good/pass/fail output
+      if [[ $OUT == *[!\ ]* ]]; then #only hyphen
+        echo -e "     $GOOD\t$FILE"
+      else #any other output that contains a space
+        echo -e "     $FAIL\t$FILE"
+        exit 1
+      fi
+  done
+
+  #reset output var
+  local OUT=""
+
+  spinny $! $FILE 0
+  #display good/pass/fail output
+  local OUT="-$(rm -r $OLDDIR &)"
+  if [[ $OUT == *No\ such* ]]; then #if a file doesn't exist
+    echo -e "     $FAIL\t$FILE"
+  elif [[ $OUT == *[!\ ]* ]]; then #only hyphen
+    echo -e "     $GOOD\t$FILET"
+  else #any other output that contains a space
+    echo -e "     $FAIL\t$FILE"
+    exit 1
+  fi
+
+}
+################################################################################
 ################################################################################
 # main body
 # Usage:
@@ -157,11 +211,18 @@ function create {
 
 MODE=$1
 if [ "$MODE" == "create" ]; then
-  #do stuff
-  echo -e "create"
+  if test -e $DIR; then
+    echo -e "$PASS\tDotfile directory exists"
+  else
+    mv ./dotfiles $DIR
+  fi
+  echo -e "create" #replace with main create function
 elif [ "$MODE" == "restore" ]; then
-  #do other stuff
-  echo -e "restore"
+  if test -e $OLDDIR; then
+    echo -e "restore" #replace with main restore function
+  else
+    echo -e "$FAIL\tOld dotfile directory does not exist or match!"
+  fi
 else
   echo -e "~~~ \e[33mUSAGE:\e[39m ~~~"
   echo -e "\e[34mbash updatedots.sh create  # create/update dotfile symlinks"
@@ -171,4 +232,5 @@ fi
 #reload configurations
 source ~/.bashrc
 #source ~/.vimrc
+
 ################################################################################
