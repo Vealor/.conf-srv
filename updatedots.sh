@@ -52,35 +52,6 @@ function spinny {
   done
 }
 ################################################################################
-# Helper function to change directory
-#   $1 - directory location
-function changedir {
-  #first in variable is location of directory change
-  local THEDIR=$1
-  local TEXT="Changing to the $THEDIR directory"
-
-  (sleep 1) &
-  #the $! gets last process ID
-  spinny $! $TEXT
-
-  #used hyphen to make out not empty on success
-  #main output for function
-  local OUT="-$(cd $THEDIR 2>&1)"
-  #status icon for function running
-  spinny $! $TEXT
-
-  #display good/pass/fail output
-  if [[ $OUT == *No\ such* ]]; then #if folder does not exist
-    echo -e "$FAIL\t$TEXT"
-    exit 1
-  elif [[ $OUT == *[!\ ]* ]]; then #only hyphen
-    echo -e "$GOOD\t$TEXT"
-  else #any other output that contains a space
-    echo -e "$FAIL\t$TEXT"
-    exit 1
-  fi
-}
-################################################################################
 # Create backup directory for existing dotfiles
 function makeolddir {
   local TEXT="Creating $OLDDIR for backup of any existing dotfiles in ~/"
