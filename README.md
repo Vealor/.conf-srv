@@ -4,7 +4,8 @@ This has two functions: to symlink specified dotfiles in your home directory and
 Initial Installation:
 ```bash
 $ git clone https://github.com/Vealor/dotfiles
-$ bash ./dotfiles/updatedots.sh
+$ cd dotfiles
+$ bash updatedots.sh create
 ```
 
 The repository should now be found by default in ~/.dotfiles.   
