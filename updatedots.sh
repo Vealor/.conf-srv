@@ -12,8 +12,9 @@
 FILES=".gitconfig .bashrc .bash_aliases .tmux.conf .vimrc .moc"
 
 DIR=~/.dotfiles         # dotfiles directory
-OLDDIR=~/.dotfiles_old  # old dotfiles backup directory
+OLDDIR=~/.dotfiles/.dotfiles_old  # old dotfiles backup directory
 
+LINE="[\e[34m==================================\e[39m]"
 GOOD="[\e[92mGOOD\e[39m]"
 PASS="[\e[93mPASS\e[39m]"
 FAIL="[\e[31mFAIL\e[39m]"
@@ -55,19 +56,21 @@ function spinny {
 # Create backup directory for existing dotfiles
 function makeolddir {
   local TEXT="Creating $OLDDIR for backup of any existing dotfiles in ~/"
-
-  (sleep 1) &
-  spinny $! $TEXT
+  # echo -e "$TEXT"
+  # (sleep 1) &
+  # spinny $! $TEXT 0
 
   #used hyphen to make out not empty on success
   #main output for function
   local OUT="-$(mkdir $OLDDIR 2>&1 &)"
   #status icon for function running
-  spinny $! $TEXT
+  # spinny $! $TEXT
 
   #display good/pass/fail output
   if [[ $OUT == *File\ exists* ]]; then #if folder exists
     echo -e "$PASS\t$TEXT"
+    echo -e "\tFILES ALREADY BACKED UP -- EXITING"
+    exit 1
   elif [[ $OUT == *[!\ ]* ]]; then #only hyphen
     echo -e "$GOOD\t$TEXT"
   else #any other output that contains a space
@@ -80,19 +83,21 @@ function makeolddir {
 function create {
 
   # move existing dotfiles in DIR to OLDDIR directory
-  local TEXT="Moving any existing dotfiles from ~ to $OLDDIR"
-  echo -e "[||||]\t$TEXT"
+  local TEXT="\nMoving any existing dotfiles from ~ to $OLDDIR"
+  echo -e "$TEXT"
   for FILE in $FILES; do
-      local OUT="-$(mv ~/$FILE ~/.dotfiles_old/ &)"
-      spinny $! $FILE 1
-      #display good/pass/fail output
-      if [[ $OUT == *File\ exists* ]]; then #if a symlink exists
-        echo -e "     $PASS\t$FILE"
-      elif [[ $OUT == *[!\ ]* ]]; then #only hyphen
-        echo -e "     $GOOD\t$FILET"
-      else #any other output that contains a space
-        echo -e "     $FAIL\t$FILE"
-        exit 1
+      if [ -f "$FILE" ] || [ -d "$FILE" ]; then
+        local OUT="-$(mv ~/$FILE $OLDDIR &)"
+        spinny $! $FILE 1
+        #display good/pass/fail output
+        if [[ $OUT == *File\ exists* ]]; then #if a symlink exists
+          echo -e "     $PASS\tMOVING $FILE"
+        elif [[ $OUT == *[!\ ]* ]]; then #only hyphen
+          echo -e "     $GOOD\tMOVING $FILE"
+        else #any other output that contains a space
+          echo -e "     $FAIL\tMOVING $FILE"
+          exit 1
+        fi
       fi
   done
 
@@ -101,17 +106,18 @@ function create {
   local OUT=""
 
   # create symlinks for new dotfiles in DIR
-  local TEXT="Creating symlink to Files in home directory."
+  local TEXT="\nCreating symlink to Files in home directory."
+  echo -e "$TEXT"
   for FILE in $FILES; do
       local OUT="-$(ln -s $DIR/$FILE ~/$FILE &)"
       spinny $! $FILE 1
       #display good/pass/fail output
       if [[ $OUT == *File\ exists* ]]; then #if a symlink exists
-        echo -e "     $PASS\t$FILE"
+        echo -e "     $PASS\tLINKING $FILE"
       elif [[ $OUT == *[!\ ]* ]]; then #only hyphen
-        echo -e "     $GOOD\t$FILET"
+        echo -e "     $GOOD\tLINKING $FILE"
       else #any other output that contains a space
-        echo -e "     $FAIL\t$FILE"
+        echo -e "     $FAIL\tLINKING $FILE"
         exit 1
       fi
   done
@@ -122,18 +128,18 @@ function restore {
 
   # move existing dotfiles in DIR to OLDDIR directory
   local TEXT="Deleting symlinks in home directory."
-  echo -e "[||||]\t$TEXT"
+  echo -e "$TEXT"
   for FILE in $FILES; do
-    if test -h $FILE; then
+    if [ -f "$FILE" ] || [ -d "$FILE" ]; then
       local OUT="-$(rm ~/$FILE &)"
-      spinny $! $FILE 1
+      # spinny $! $FILE 1
       #display good/pass/fail output
       if [[ $OUT == *No\ such* ]]; then #if a file doesn't exist
-        echo -e "     $FAIL\t$FILE"
+        echo -e "     $FAIL\tREMOVING $FILE"
       elif [[ $OUT == *[!\ ]* ]]; then #only hyphen
-        echo -e "     $GOOD\t$FILET"
+        echo -e "     $GOOD\tREMOVING $FILE"
       else #any other output that contains a space
-        echo -e "     $FAIL\t$FILE"
+        echo -e "     $FAIL\tREMOVING $FILE"
         exit 1
       fi
     fi
@@ -143,32 +149,33 @@ function restore {
   local OUT=""
 
   #restores old system dotfiles
-  local TEXT="Restoring old dotfiles from $OLDDIR"
-  echo -e "[||||]\t$TEXT"
+  local TEXT="\nRestoring old dotfiles from $OLDDIR"
+  echo -e "$TEXT"
   for FILE in $FILES; do
-      local OUT="-$(mv ~/.dotfiles_old/ ~/$FILE &)"
+    if [ -f "$OLDDIR/$FILE" ] || [ -d "$OLDDIR/$FILE" ]; then
+      local OUT="-$(mv $OLDDIR/$FILE ~/$FILE &)"
       spinny $! $FILE 1
       #display good/pass/fail output
       if [[ $OUT == *[!\ ]* ]]; then #only hyphen
-        echo -e "     $GOOD\t$FILE"
+        echo -e "     $GOOD\tRESTORED $FILE"
       else #any other output that contains a space
-        echo -e "     $FAIL\t$FILE"
+        echo -e "     $FAIL\tRESTORED $FILE"
         exit 1
       fi
+    fi
   done
 
   #reset output var
   local OUT=""
 
-  spinny $! $FILE 0
   #display good/pass/fail output
   local OUT="-$(rm -r $OLDDIR &)"
   if [[ $OUT == *No\ such* ]]; then #if a file doesn't exist
-    echo -e "     $FAIL\t$FILE"
+    echo -e "     $FAIL\tREMOVE OLD $OLDDIR"
   elif [[ $OUT == *[!\ ]* ]]; then #only hyphen
-    echo -e "     $GOOD\t$FILET"
+    echo -e "     $GOOD\tREMOVE OLD $OLDDIR"
   else #any other output that contains a space
-    echo -e "     $FAIL\t$FILE"
+    echo -e "     $FAIL\tREMOVE OLD $OLDDIR"
     exit 1
   fi
 
@@ -179,13 +186,13 @@ function restore {
 # Usage:
 #   bash updatedots.sh create  #create/update dotfile symlinks
 #   bash updatedots.sh restore #restores pre-existing dotfiles for system
-
+echo -e "$LINE"
 MODE=$1
 if [ "$MODE" == "create" ]; then
-  if test -e $DIR; then
-    echo -e "$PASS\tDotfile directory exists"
+  if [ -d "$DIR" ]; then
+    echo -e "$PASS\t ~/.dotfile directory exists, no need to move"
   else
-    mv ./dotfiles $DIR
+    mv ~/dotfiles $DIR
   fi
   # create backup directory
   makeolddir
@@ -193,7 +200,7 @@ if [ "$MODE" == "create" ]; then
   create
 elif [ "$MODE" == "restore" ]; then
   #test if the olddir already exists to prevent overwrite
-  if test -e $OLDDIR; then
+  if [ -d "$OLDDIR" ]; then
     # main restore function
     restore
   else
@@ -205,6 +212,7 @@ else
   echo -e "\e[35mbash updatedots.sh restore # restores pre-existing dotfiles for system\e[39m"
 fi
 
+echo -e "$LINE"
 #reload configurations
 source ~/.bashrc
 #source ~/.vimrc
