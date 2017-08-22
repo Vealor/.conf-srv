@@ -181,6 +181,23 @@ function restore {
 
 }
 ################################################################################
+# does basic initial installs on a ubuntu system
+function ubuntu_install {
+  echo " #- UBUNTU =>"
+  echo " #- Adding PPAs:"
+
+  #Atom
+  #chrome
+
+  sudo apt-get update
+  sudo apt-get install git vim gparted http-server kolourpaint4 tmux feh nmap netcat
+
+  #Add in stuff about making terminal go fullscreen on hotkey
+
+  #enable workspaces
+  #Add stuff for removing workspaces dock icon
+}
+################################################################################
 ################################################################################
 # main body
 # Usage:
@@ -188,6 +205,15 @@ function restore {
 #   bash updatedots.sh restore #restores pre-existing dotfiles for system
 echo -e "$LINE"
 MODE=$1
+local TEMP="-$(uname -a)"
+echo " ## DOING INSTALLS ## "
+if [[ $TEMP =~ Ubuntu ]]; then
+  ubuntu_install
+else
+  echo " # System not compatible with given installs"
+fi
+
+echo -e "$LINE"
 if [ "$MODE" == "create" ]; then
   if [ -d "$DIR" ]; then
     echo -e "$PASS\t ~/.dotfile directory exists, no need to move"
