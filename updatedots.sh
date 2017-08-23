@@ -191,19 +191,19 @@ function ubuntu_install {
 
   #Atom
   sudo add-apt-repository -y ppa:webupd8team/atom
-  sudo apt-get install -y atom
   #chrome
   wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key -y add -
-  sudo apt-get install -y google-chrome-stable
   #elixir
   sudo apt-get -y install build-essential git wget libssl-dev libreadline-dev libncurses5-dev zlib1g-dev m4 curl wx-common libwxgtk3.0-dev autoconf
   wget https://packages.erlang-solutions.com/erlang-solutions_1.0_all.deb && sudo dpkg -i erlang-solutions_1.0_all.deb
-  sudo apt-get -y update
-  sudo apt-get install -y esl-erlang
-  sudo apt-get install -y elixir
 
   #extra stuff
   sudo apt-get -y update
+  sudo apt-get -y install atom
+  sudo apt-get -y install google-chrome-stable
+  sudo apt-get -y install esl-erlang
+  sudo apt-get -y install elixir
+  sudo apt-get -y install texmaker texstudio texlive-math-extra texlive-science texlive-bibtex-extra biber
   sudo apt-get -y install git vim gparted http-server kolourpaint4 tmux feh nmap netcat
 
   #Add in stuff about making terminal go fullscreen on hotkey
