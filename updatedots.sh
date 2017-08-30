@@ -203,8 +203,19 @@ function ubuntu_install {
   sudo apt-get -y install google-chrome-stable
   sudo apt-get -y install esl-erlang
   sudo apt-get -y install elixir
-  sudo apt-get -y install texmaker texstudio texlive-math-extra texlive-science texlive-bibtex-extra biber
-  sudo apt-get -y install git vim gparted http-server kolourpaint4 tmux feh nmap netcat
+  sudo apt-get -y install texmaker texstudio texlive-math-extra texlive-science texlive-bibtex-extra biber latex-cjk-all
+  sudo apt-get -y install git vim gparted http-server kolourpaint4 tmux feh nmap netcat mocp whois
+  #add java installs
+  #add python installs
+  #add postgres installs
+  #add eclipse installs
+
+  #add other taskbar apps
+  sudo apt-get install indicator-multiload
+
+
+  #funny
+  sudo apt-get -y install sl espeak
 
   #Add in stuff about making terminal go fullscreen on hotkey
 
