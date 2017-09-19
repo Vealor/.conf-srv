@@ -13,6 +13,10 @@ For information on usage:
 ```bash
 $ bash ~/.dotfiles/updatedots.sh
 ~~~ USAGE: ~~~
+bash updatedots.sh insatll # installs base software for ubuntu with apt
 bash updatedots.sh create  # create/update dotfile symlinks
 bash updatedots.sh restore # restores pre-existing dotfiles for system
+bash updatedots.sh update  # performes a restore + git pull + create
 ```
+#### Requirements
+tmux >= 2.1

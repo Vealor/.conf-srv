@@ -9,7 +9,7 @@
 #
 ################################################################################
 # list of files/folders to symlink in homedir
-FILES=".gitconfig .bashrc .bash_aliases .tmux.conf .vimrc .moc"
+FILES=".moc .bash_aliases .bashrc .gitconfig .tmux.conf .vimrc"
 
 DIR=~/.dotfiles         # dotfiles directory
 OLDDIR=~/.dotfiles/.dotfiles_old  # old dotfiles backup directory
@@ -20,51 +20,14 @@ PASS="[\e[93mPASS\e[39m]"
 FAIL="[\e[31mFAIL\e[39m]"
 ################################################################################
 ################################################################################
-# Helper function for loading
-#   $1 - process ID, ususally last one  [ $! ]
-#   $2 - input text
-#   $3 - if there is an initial input tab to be displayed (0=no, else yes)
-function spinny {
-  local PID=$1
-  local TEXT=$2
-  local TAB=$3 #if initial tab or not
-  local TEXT_LEN=${#TEXT}
-  local DELAY=0.7
-  local FRAMES='|/-\'
-  while [ -d /proc/$PID ];
-  do
-    if [ "$TAB" -eq 0 ] ; then
-      printf "[%c%c%c%c]\t%s" "$FRAMES" "$FRAMES" "$FRAMES" "$FRAMES" "$TEXT"
-    else
-      printf "     [%c%c%c%c]\t%s" "$FRAMES" "$FRAMES" "$FRAMES" "$FRAMES" "$TEXT"
-    fi
-    local TMP=${FRAMES#?}
-    FRAMES=$TMP${FRAMES%"$TMP"}
-    sleep $DELAY
-    if [ "$TAB" -eq 0 ] ; then
-      printf "\b\b\b\b\b\b\b\b\b"
-    else
-      printf "\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b"
-    fi
-    local BEGIN=0
-    for ((i=$BEGIN;i<$TEXT_LEN;i++)); do
-      printf "\b"
-    done
-  done
-}
-################################################################################
 # Create backup directory for existing dotfiles
 function makeolddir {
   local TEXT="Creating $OLDDIR for backup of any existing dotfiles in ~/"
-  # echo -e "$TEXT"
-  # (sleep 1) &
-  # spinny $! $TEXT 0
 
   #used hyphen to make out not empty on success
   #main output for function
   local OUT="-$(mkdir $OLDDIR 2>&1 &)"
   #status icon for function running
-  # spinny $! $TEXT
 
   #display good/pass/fail output
   if [[ $OUT == *File\ exists* ]]; then #if folder exists
@@ -88,7 +51,6 @@ function create {
   for FILE in $FILES; do
       if [ -f "$FILE" ] || [ -d "$FILE" ]; then
         local OUT="-$(mv ~/$FILE $OLDDIR &)"
-        spinny $! $FILE 1
         #display good/pass/fail output
         if [[ $OUT == *File\ exists* ]]; then #if a symlink exists
           echo -e "     $PASS\tMOVING $FILE"
@@ -110,7 +72,6 @@ function create {
   echo -e "$TEXT"
   for FILE in $FILES; do
       local OUT="-$(ln -s $DIR/$FILE ~/$FILE &)"
-      spinny $! $FILE 1
       #display good/pass/fail output
       if [[ $OUT == *File\ exists* ]]; then #if a symlink exists
         echo -e "     $PASS\tLINKING $FILE"
@@ -132,7 +93,6 @@ function restore {
   for FILE in $FILES; do
     if [ -f "$FILE" ] || [ -d "$FILE" ]; then
       local OUT="-$(rm ~/$FILE &)"
-      # spinny $! $FILE 1
       #display good/pass/fail output
       if [[ $OUT == *No\ such* ]]; then #if a file doesn't exist
         echo -e "     $FAIL\tREMOVING $FILE"
@@ -154,7 +114,6 @@ function restore {
   for FILE in $FILES; do
     if [ -f "$OLDDIR/$FILE" ] || [ -d "$OLDDIR/$FILE" ]; then
       local OUT="-$(mv $OLDDIR/$FILE ~/$FILE &)"
-      spinny $! $FILE 1
       #display good/pass/fail output
       if [[ $OUT == *[!\ ]* ]]; then #only hyphen
         echo -e "     $GOOD\tRESTORED $FILE"
@@ -187,7 +146,7 @@ function ubuntu_install {
   echo " #- Adding PPAs:"
 
   #initial update
-  sudo apt-get -y update
+  sudo apt update
 
   #Atom
   sudo add-apt-repository -y ppa:webupd8team/atom
@@ -196,31 +155,55 @@ function ubuntu_install {
   #elixir
   sudo apt-get -y install build-essential git wget libssl-dev libreadline-dev libncurses5-dev zlib1g-dev m4 curl wx-common libwxgtk3.0-dev autoconf
   wget https://packages.erlang-solutions.com/erlang-solutions_1.0_all.deb && sudo dpkg -i erlang-solutions_1.0_all.deb
+  #ffmpeg
+  sudo add-apt-repository -y ppa:jonathonf/ffmpeg-3
+  #mpv
+  sudo add-apt-repository -y ppa:mc3man/mpv-tests
+  #vlc
+  sudo add-apt-repository -y ppa:videolan/master-daily
 
-  #extra stuff
-  sudo apt-get -y update
-  sudo apt-get -y install atom
-  sudo apt-get -y install google-chrome-stable
-  sudo apt-get -y install esl-erlang
-  sudo apt-get -y install elixir
-  sudo apt-get -y install texmaker texstudio texlive-math-extra texlive-science texlive-bibtex-extra biber latex-cjk-all
-  sudo apt-get -y install git vim gparted http-server kolourpaint4 tmux feh nmap netcat mocp whois
+  sudo apt update
+  echo " #- Doing apt Installs:"
+  sudo apt -y install atom
+  sudo apt -y install google-chrome-stable
+  sudo apt -y install esl-erlang
+  sudo apt -y install elixir
+  sudo apt -y install texmaker texstudio texlive-math-extra texlive-science texlive-bibtex-extra biber latex-cjk-all
+  sudo apt -y install git vim gparted http-server kolourpaint4 tmux feh nmap netcat mocp whois meld mpv ffmpeg vlc inxi
+  sudo apt -y install python python-pip
+  sudo apt -y install boinc-client boinc-manager
+  sudo apt -y install sl espeak
+
+  echo " #- Doing pip Installs:"
+  sudo pip install youtube-dl
+
   #add java installs
   #add python installs
-  #add postgres installs
-  #add eclipse installs
 
-  #add other taskbar apps
-  sudo apt-get install indicator-multiload
+  #add to alias for weather with arg for location
+  #clear && curl -s wttr.in/Nara |egrep -v "Follow"|egrep -v "feature"
 
 
-  #funny
-  sudo apt-get -y install sl espeak
+  #add i3
 
-  #Add in stuff about making terminal go fullscreen on hotkey
 
-  #enable workspaces
-  #Add stuff for removing workspaces dock icon
+
+
+
+  echo " #- System Upgrade:"
+  sudo apt -y dist-upgrade
+
+#------------------------------------------------------------------------------#
+# NOTES:
+
+  # need script to check twitch followers that are active and their best
+  # stream quality
+
+  #twitch stuff
+  # youtube-dl -F https://twitch.tv/summit1g
+  # mpv https://twitch.tv/summit1g --ytdl-format=best &
+
+
 }
 ################################################################################
 ################################################################################
@@ -230,15 +213,6 @@ function ubuntu_install {
 #   bash updatedots.sh restore #restores pre-existing dotfiles for system
 echo -e "$LINE"
 MODE=$1
-local TEMP="-$(uname -a)"
-echo " ## DOING INSTALLS ## "
-if [[ $TEMP =~ Ubuntu ]]; then
-  ubuntu_install
-else
-  echo " # System not compatible with given installs"
-fi
-
-echo -e "$LINE"
 if [ "$MODE" == "create" ]; then
   if [ -d "$DIR" ]; then
     echo -e "$PASS\t ~/.dotfile directory exists, no need to move"
@@ -257,10 +231,43 @@ elif [ "$MODE" == "restore" ]; then
   else
     echo -e "$FAIL\tOld dotfile directory does not exist or match!"
   fi
+
+elif [ "$MODE" == "install" ]; then
+  #installs from sys information
+  echo " ## DOING INSTALLS ## "
+  local TEMP="-$(uname -a)"
+  if [[ $TEMP =~ Ubuntu ]]; then
+    ubuntu_install
+  else
+    echo " # System not compatible with given installs"
+  fi
+elif [ "$MODE" == "update" ]; then
+  #installs from sys information
+  echo " ## Performing Update from GitHub ## "
+  echo " ## ~~Restoring Files: "
+  if [ -d "$OLDDIR" ]; then
+    # main restore function
+    restore
+  echo " ## ~~Updating: "
+    git pull
+  echo " ## ~~Creating new links: "
+    if [ -d "$DIR" ]; then
+      echo -e "$PASS\t ~/.dotfile directory exists, no need to move"
+    else
+      mv ~/dotfiles $DIR
+    fi
+    makeolddir
+    create
+  else
+    echo -e "$FAIL\tOld dotfile directory does not exist or match!"
+  fi
+
 else
   echo -e "~~~ \e[33mUSAGE:\e[39m ~~~"
   echo -e "\e[34mbash updatedots.sh create  # create/update dotfile symlinks"
-  echo -e "\e[35mbash updatedots.sh restore # restores pre-existing dotfiles for system\e[39m"
+  echo -e "\e[35mbash updatedots.sh restore # restores pre-existing dotfiles for system"
+  echo -e "\e[93mbash updatedots.sh install # installs software for system\e[39m"
+  echo -e "\e[93mbash updatedots.sh update  # updates new dotfiles from github\e[39m"
 fi
 
 echo -e "$LINE"
