@@ -1,22 +1,22 @@
 [user]
-  name = Jakob Roberts
+  name  = Vealor
   email = jakob.m.roberts@gmail.com
 [core]
-  whitespace = off
-  excludesfile = ~/.gitignore
+  whitespace    = off
+  excludesfile  = ~/.gitignore
 [color]
   ui = true
 [color "branch"]
   current = yellow reverse
-  local = yellow
-  remote = green
+  local   = yellow
+  remote  = green
 [color "diff"]
   meta = yellow bold
   frag = magenta bold
-  old = red bold
-  new = green bold
+  old  = red bold
+  new  = green bold
 [color "status"]
-  added = green
-  changed = yellow
+  added     = green
+  changed   = yellow
   untracked = magenta
-  deleted = red
+  deleted   = red
