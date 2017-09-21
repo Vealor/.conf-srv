@@ -45,3 +45,12 @@ function starttwitch {
 function getweather {
   curl -s wttr.in/$1 |egrep -v "Follow"|egrep -v "feature"
 }
+
+#youtube
+# TO DO:  add support for just end link for TY, add soundcloud? other?
+function ytm { #music
+  mpv $1 --loop-playlist=inf --autofit-larger=30%x30% &
+}
+function ytv { #video
+  mpv $1 --autofit-larger=50%x50% &
+}
