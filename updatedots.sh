@@ -21,7 +21,7 @@ FAIL="[\e[31mFAIL\e[39m]"
 ################################################################################
 ################################################################################
 # Create backup directory for existing dotfiles
-function makeolddir {
+function dot_makeolddir {
   local TEXT="Creating $OLDDIR for backup of any existing dotfiles in ~/"
 
   #used hyphen to make out not empty on success
@@ -43,7 +43,7 @@ function makeolddir {
 }
 ################################################################################
 # creates symlinks for dotfiles
-function create {
+function dot_create {
 
   # move existing dotfiles in DIR to OLDDIR directory
   local TEXT="\nMoving any existing dotfiles from ~ to $OLDDIR"
@@ -85,7 +85,7 @@ function create {
 }
 ################################################################################
 # creates symlinks for dotfiles
-function restore {
+function dot_restore {
 
   # move existing dotfiles in DIR to OLDDIR directory
   local TEXT="Deleting symlinks in home directory."
@@ -186,23 +186,19 @@ function ubuntu_install {
 
   #add i3
 
-
-
-
-
   echo " #- System Upgrade:"
   sudo apt -y dist-upgrade
+}
+# does basic initial installs on a ubuntu system
+function arch_install {
+  echo " #- ARCH =>"
+  echo " #- Adding PPAs:"
 
-#------------------------------------------------------------------------------#
-# NOTES:
+  echo " #- Doing pacman Installs:"
 
-  # need script to check twitch followers that are active and their best
-  # stream quality
+  echo " #- Doing pip Installs:"
 
-  #twitch stuff
-  # youtube-dl -F https://twitch.tv/summit1g
-  # mpv https://twitch.tv/summit1g --ytdl-format=best &
-
+  echo " #- System Upgrade:"
 
 }
 ################################################################################
@@ -220,14 +216,14 @@ if [ "$MODE" == "create" ]; then
     mv ~/dotfiles $DIR
   fi
   # create backup directory
-  makeolddir
+  dot_makeolddir
   # main create function
-  create
+  dot_create
 elif [ "$MODE" == "restore" ]; then
   #test if the olddir already exists to prevent overwrite
   if [ -d "$OLDDIR" ]; then
     # main restore function
-    restore
+    dot_restore
   else
     echo -e "$FAIL\tOld dotfile directory does not exist or match!"
   fi
@@ -238,6 +234,8 @@ elif [ "$MODE" == "install" ]; then
   local TEMP="-$(uname -a)"
   if [[ $TEMP =~ Ubuntu ]]; then
     ubuntu_install
+  elif [[ $TEMP =~ Arch ]]; then
+    arch_install
   else
     echo " # System not compatible with given installs"
   fi
@@ -247,7 +245,7 @@ elif [ "$MODE" == "update" ]; then
   echo " ## ~~Restoring Files: "
   if [ -d "$OLDDIR" ]; then
     # main restore function
-    restore
+    dot_restore
   echo " ## ~~Updating: "
     git pull
   echo " ## ~~Creating new links: "
@@ -256,8 +254,8 @@ elif [ "$MODE" == "update" ]; then
     else
       mv ~/dotfiles $DIR
     fi
-    makeolddir
-    create
+    dot_makeolddir
+    dot_create
   else
     echo -e "$FAIL\tOld dotfile directory does not exist or match!"
   fi
