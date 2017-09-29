@@ -1,4 +1,7 @@
 
+#clock in corner of shell top right
+# while sleep 1;do tput sc;tput cup 0 $(($(tput cols)-25));date;tput rc;done &
+
 #to open alias listing
 alias changealias="vim ~/.bash_aliases"
 
@@ -31,7 +34,7 @@ alias syinfo='inxi -Fxz'
 
 #twitch
 function gettwitch {
-  TWITCHERS="summit1g ZodiacOnFire shroud monstercat alsatiak"
+  TWITCHERS="monstercat summit1g ZodiacOnFire alsatiak shroud "
   for TWITCHER in $TWITCHERS; do
     echo "======== $TWITCHER >>>"
     youtube-dl -F https://twitch.tv/$TWITCHER | egrep -v --color=never "twitch:stream|info"
@@ -45,6 +48,13 @@ function starttwitch {
 function getweather {
   curl -s wttr.in/$1 |egrep -v "Follow"|egrep -v "feature"
 }
+function getweatherloop {
+  while true ; do
+    clear
+    curl -s wttr.in/$1 |egrep -v "Follow"|egrep -v "feature"
+    sleep 300
+  done
+}
 
 #youtube
 # TO DO:  add support for just end link for TY, add soundcloud? other?
@@ -53,4 +63,13 @@ function ytm { #music
 }
 function ytv { #video
   mpv $1 --autofit-larger=50%x50% &
+}
+
+#sensors
+function sensorloop {
+  while true ; do
+    clear
+    sensors
+    sleep 2
+  done
 }
