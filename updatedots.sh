@@ -165,7 +165,7 @@ function ubuntu_install {
   sudo apt -y install git vim gparted http-server kolourpaint4 tmux feh nmap netcat mocp whois meld mpv ffmpeg vlc inxi
   sudo apt -y install python python-pip
   sudo apt -y install boinc-client boinc-manager
-  sudo apt -y install sl espeak
+  sudo apt -y install sl espeak arp-scan
   sud apt-get -y install -f #fix any broken package requirements
 
   echo " #- Doing pip Installs:"

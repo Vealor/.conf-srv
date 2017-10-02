@@ -1,3 +1,6 @@
 # System Specific changes
 # ~/.bash_sysspec
 ################################################################################
+#examples of things:
+#   - ROS configs & catkin
+# SSH aliases: alias SERVERNAME='ssh YOURWEBSITE.com -l USERNAME -p PORT'
