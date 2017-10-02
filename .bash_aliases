@@ -1,10 +1,6 @@
 # System Aliases
 # ~/.bash_aliases
 ################################################################################
-
-#to open alias listing
-alias changealias="vim ~/.bash_aliases"
-
 #shutdown
 alias shut="sudo shutdown -h now"
 alias reboot="sudo reboot"
