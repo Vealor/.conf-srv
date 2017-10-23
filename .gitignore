@@ -1,1 +1,4 @@
 .dotfiles_old
+
+# ignore system specific files
+.bash_sysspec

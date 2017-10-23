@@ -208,7 +208,9 @@ function ubuntu_install {
   #add workspaces
   gsettings set org.compiz.core:/org/compiz/profiles/unity/plugins/core/ hsize 3
   gsettings set org.compiz.core:/org/compiz/profiles/unity/plugins/core/ vsize 2
-
+  #remove workspace switcher icon
+  WRKSPC=$(gsettings get com.canonical.Unity.Launcher favorites |sed -e "s/'unity:\/\/expo-icon', //")
+  gsettings set com.canonical.Unity.Launcher favorites "$WRKSPC"
 
   echo " #- System Upgrade:"
   sudo apt remove thunderbird
