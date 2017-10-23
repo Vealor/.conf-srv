@@ -184,12 +184,18 @@ function ubuntu_install {
   sudo apt -y install python python-pip openjdk-8-jdk python3 python3-pip
   sudo apt -y install boinc-client boinc-manager
   sudo apt -y install sl espeak arp-scan
+  sudo apt -y install compizconfig-settings-manager unity-tweak-tool
   sudo apt-get -y install -f #fix any broken package requirements
 
   #get discord here
   wget -O discord-0.0.1.deb https://discordapp.com/api/download?platform=linux&format=deb
   sudo dpkg -i discord-0.0.1.deb
   rm discord-0.0.1.deb
+
+  #unity-tweak-tool ambiance-blackout-aqua-pro
+  sudo add-apt-repository ppa:ravefinity-project/ppa
+  sudo apt -y update
+  sudo apt -y install ambiance-blackout-colors
 
   echo " #- Doing pip Installs:"
   sudo pip install youtube-dl

@@ -2,9 +2,10 @@
 # ~/.bash_functions
 ################################################################################
 #twitch
+
+TWITCHSOURCES="monstercat summit1g ZodiacOnFire alsatiak shroud "
 function gettwitch {
-  TWITCHERS="monstercat summit1g ZodiacOnFire alsatiak shroud "
-  for TWITCHER in $TWITCHERS; do
+  for TWITCHER in $TWITCHSOURCES; do
     echo "======== $TWITCHER >>>"
     youtube-dl -F https://twitch.tv/$TWITCHER | egrep -v --color=never "twitch:stream|info"
   done
@@ -12,6 +13,15 @@ function gettwitch {
 function starttwitch {
   mpv --no-config --ytdl-format=$2 https://www.twitch.tv/$1 &
 }
+
+_starttwitch() {
+  local cur="${COMP_WORDS[COMP_CWORD]}"
+  COMPREPLY=( $(compgen -W "$TWITCHSOURCES" -- ${cur}) )
+
+  unset TWITCHERS
+  return 0
+}
+complete -F _starttwitch starttwitch #-o nospace
 ################################################################################
 #weather
 function getweather {
