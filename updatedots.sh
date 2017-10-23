@@ -141,46 +141,78 @@ function ubuntu_install {
   #initial update
   sudo apt update
 
+  sudo add-apt-repository "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc) main universe restricted multiverse"
+
   #Atom
   sudo add-apt-repository -y ppa:webupd8team/atom
   #chrome
-  wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key -y add -
+  wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+  sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
   #elixir
   sudo apt -y install build-essential git wget libssl-dev libreadline-dev libncurses5-dev zlib1g-dev m4 curl wx-common libwxgtk3.0-dev autoconf
   wget https://packages.erlang-solutions.com/erlang-solutions_1.0_all.deb && sudo dpkg -i erlang-solutions_1.0_all.deb
+  rm erlang-solutions_1.0_all.deb
+
   #ffmpeg
   sudo add-apt-repository -y ppa:jonathonf/ffmpeg-3
+  #indicator-multiload
+  sudo add-apt-repository -y ppa:indicator-multiload/stable-daily
   #mpv
   sudo add-apt-repository -y ppa:mc3man/mpv-tests
   #vlc
   sudo add-apt-repository -y ppa:videolan/master-daily
 
   sudo apt update
+
+  #Node and NPM
+  curl -sL https://deb.nodesource.com/setup_6.x -o nodesource_setup.sh
+  sudo bash nodesource_setup.sh
+  sudo apt-get install nodejs
+  sudo apt-get install build-essential
+  rm nodesource_setup.sh
+
   echo " #- Doing apt Installs:"
+  sudo apt -y install libc++1
   sudo apt -y install atom
   sudo apt -y install google-chrome-stable
   sudo apt -y install esl-erlang
   sudo apt -y install elixir
+  sudo apt -y install indicator-multiload
+  sudo apt -y install git vim gparted kolourpaint4 tmux feh nmap netcat whois mpv vlc
   sudo apt -y install texmaker texstudio texlive-math-extra texlive-science texlive-bibtex-extra biber latex-cjk-all
-  sudo apt -y install git vim gparted http-server kolourpaint4 tmux feh nmap netcat mocp whois meld mpv ffmpeg vlc inxi gedit-plugins
+  sudo apt -y install moc meld ffmpeg inxi gedit-plugins
   sudo apt -y install python python-pip openjdk-8-jdk python3 python3-pip
   sudo apt -y install boinc-client boinc-manager
   sudo apt -y install sl espeak arp-scan
-  sud apt-get -y install -f #fix any broken package requirements
+  sudo apt-get -y install -f #fix any broken package requirements
+
+  #get discord here
+  wget -O discord-0.0.1.deb https://discordapp.com/api/download?platform=linux&format=deb
+  sudo dpkg -i discord-0.0.1.deb
+  rm discord-0.0.1.deb
 
   echo " #- Doing pip Installs:"
   sudo pip install youtube-dl
 
-  #add java installs
-  #add python installs
+  echo " #- Doing npm Installs:"
+  sudo npm -g install http-server
 
-  #get discord here
 
 
   #add i3
 
+
   echo " #- System Upgrade:"
   sudo apt -y dist-upgrade
+
+  #add workspaces
+  gsettings set org.compiz.core:/org/compiz/profiles/unity/plugins/core/ hsize 3
+  gsettings set org.compiz.core:/org/compiz/profiles/unity/plugins/core/ vsize 2
+
+
+  echo " #- System Upgrade:"
+  sudo apt remove thunderbird
+  sudo apt remove libreoffice-*
 }
 # does basic initial installs on a ubuntu system
 function arch_install {
