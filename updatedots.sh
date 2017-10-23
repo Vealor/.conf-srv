@@ -162,8 +162,8 @@ function ubuntu_install {
   sudo apt -y install esl-erlang
   sudo apt -y install elixir
   sudo apt -y install texmaker texstudio texlive-math-extra texlive-science texlive-bibtex-extra biber latex-cjk-all
-  sudo apt -y install git vim gparted http-server kolourpaint4 tmux feh nmap netcat mocp whois meld mpv ffmpeg vlc inxi
-  sudo apt -y install python python-pip
+  sudo apt -y install git vim gparted http-server kolourpaint4 tmux feh nmap netcat mocp whois meld mpv ffmpeg vlc inxi gedit-plugins
+  sudo apt -y install python python-pip openjdk-8-jdk python3 python3-pip
   sudo apt -y install boinc-client boinc-manager
   sudo apt -y install sl espeak arp-scan
   sud apt-get -y install -f #fix any broken package requirements
