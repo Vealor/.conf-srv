@@ -226,7 +226,7 @@ elif [ "$MODE" == "restore" ]; then
 elif [ "$MODE" == "install" ]; then
   #installs from sys information
   echo " ## DOING INSTALLS ## "
-  local TEMP="-$(uname -a)"
+  TEMP="-$(uname -a)"
   if [[ $TEMP =~ Ubuntu ]]; then
     ubuntu_install
   elif [[ $TEMP =~ Arch ]]; then
