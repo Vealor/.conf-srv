@@ -180,7 +180,7 @@ function ubuntu_install {
   sudo apt -y install indicator-multiload
   sudo apt -y install git vim gparted kolourpaint4 tmux feh nmap netcat whois mpv vlc
   sudo apt -y install texmaker texstudio texlive-math-extra texlive-science texlive-bibtex-extra biber latex-cjk-all
-  sudo apt -y install moc meld ffmpeg inxi gedit-plugins
+  sudo apt -y install moc meld ffmpeg inxi gedit-plugins tree
   sudo apt -y install python python-pip openjdk-8-jdk python3 python3-pip
   sudo apt -y install boinc-client boinc-manager
   sudo apt -y install sl espeak arp-scan
