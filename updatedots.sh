@@ -276,7 +276,7 @@ function ubuntu_install {
                         # Final Fix Check
                         "-f"
                       )
-  # do_apt $INSTALLS
+  do_apt $INSTALLS
 
   # add i3
 
