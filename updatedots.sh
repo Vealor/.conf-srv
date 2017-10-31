@@ -20,6 +20,12 @@ LINE="[\e[34m==================================\e[39m]"
 GOOD="[\e[92mGOOD\e[39m]"
 PASS="[\e[93mPASS\e[39m]"
 FAIL="[\e[31mFAIL\e[39m]"
+
+RED=$'\e[31m'
+GREEN=$'\e[92m'
+BLUE=$'\e[34m'
+YELLOW=$'\e[93m'
+DEFAULT=$'\e[39m'
 ################################################################################
 ################################################################################
 #Create backup directory for existing dotfiles
@@ -135,94 +141,181 @@ function dot_restore {
 }
 ################################################################################
 # does basic initial installs on a ubuntu system
+function do_apt {
+  #preparatory update
+  sudo apt update
+  INSTALLS=$1
+  LEN=${#INSTALLS[@]}
+  for i in "${!INSTALLS[@]}"; do
+    echo -e "$BLUE  ==>> $(($i + 1)) / $LEN$GREEN ${INSTALLS[$i]}$DEFAULT"
+    (sudo apt -y install ${INSTALLS[$i]} && \
+      echo -e "$GOOD: ${INSTALLS[$i]} INSTALLED")||\
+      echo -e "$FAIL: $GREEN${INSTALLS[$i]}$RED FAILED TO INSTALL$DEFAULT"
+  done
+}
+
 function ubuntu_install {
   echo " #- UBUNTU =>"
-  echo " #- Adding PPAs:"
-  #initial update
-  sudo apt update
-
-  sudo add-apt-repository "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc) main universe restricted multiverse"
-
-  #Atom
-  sudo add-apt-repository -y ppa:webupd8team/atom
-  #chrome
-  wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-  sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
-  #elixir
-  sudo apt -y install build-essential git wget libssl-dev libreadline-dev libncurses5-dev zlib1g-dev m4 curl wx-common libwxgtk3.0-dev autoconf
-  wget https://packages.erlang-solutions.com/erlang-solutions_1.0_all.deb && sudo dpkg -i erlang-solutions_1.0_all.deb
-  rm erlang-solutions_1.0_all.deb
-
-  #ffmpeg
-  sudo add-apt-repository -y ppa:jonathonf/ffmpeg-3
-  #indicator-multiload
-  sudo add-apt-repository -y ppa:indicator-multiload/stable-daily
-  #mpv
-  sudo add-apt-repository -y ppa:mc3man/mpv-tests
-  #vlc
-  sudo add-apt-repository -y ppa:videolan/master-daily
-
-  sudo apt update
-
-  #Node and NPM
-  curl -sL https://deb.nodesource.com/setup_6.x -o nodesource_setup.sh
-  sudo bash nodesource_setup.sh
-  sudo apt-get install nodejs
-  sudo apt-get install build-essential
-  rm nodesource_setup.sh
+  read -r -p "  ${YELLOW}Do you want to add PPAs? [y/N]$DEFAULT " pparesponse
+  if [[ "$pparesponse" =~ ^([yY][eE][sS]|[yY])+$ ]]
+  then
+    echo " #- Adding PPAs:"
+    # pre-installs
+    declare -a PREINSTALLS=(
+                          "build-essential"
+                          "git"
+                          "wget"
+                          "libssl-dev"
+                          "libreadline-dev"
+                          "libncurses5-dev"
+                          "zlib1g-dev"
+                          "m4"
+                          "curl"
+                          "wx-common"
+                          "libwxgtk3.0-dev"
+                          "autoconf"
+                        )
+    do_apt $PREINSTALLS
+    # Core
+    sudo add-apt-repository "deb http://archive.ubuntu.com/ubuntu \
+      $(lsb_release -sc) main universe restricted multiverse"
+    # Atom
+    sudo add-apt-repository -y ppa:webupd8team/atom
+    # chrome
+    wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | \
+      sudo apt-key add -
+    sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ \
+      stable main" >> /etc/apt/sources.list.d/google.list'
+    # elixir
+    wget https://packages.erlang-solutions.com/erlang-solutions_1.0_all.deb && \
+      sudo dpkg -i erlang-solutions_1.0_all.deb
+    rm erlang-solutions_1.0_all.deb
+    # ffmpeg
+    sudo add-apt-repository -y ppa:jonathonf/ffmpeg-3
+    # indicator-multiload
+    sudo add-apt-repository -y ppa:indicator-multiload/stable-daily
+    # mpv
+    sudo add-apt-repository -y ppa:mc3man/mpv-tests
+    # vlc
+    sudo add-apt-repository -y ppa:videolan/master-daily
+    # NodeJS and NPM
+    curl -sL https://deb.nodesource.com/setup_6.x -o nodesource_setup.sh && \
+    sudo bash nodesource_setup.sh
+    rm nodesource_setup.sh
+    # Theme
+    sudo add-apt-repository -y ppa:ravefinity-project/ppa
+  else
+    echo " #- PPAS SKIPPED"
+  fi
 
   echo " #- Doing apt Installs:"
-  sudo apt -y install libc++1
-  sudo apt -y install atom
-  sudo apt -y install google-chrome-stable
-  sudo apt -y install esl-erlang
-  sudo apt -y install elixir
-  sudo apt -y install indicator-multiload
-  sudo apt -y install git vim gparted kolourpaint4 tmux feh nmap netcat whois mpv vlc
-  sudo apt -y install texmaker texstudio texlive-math-extra texlive-science texlive-bibtex-extra biber latex-cjk-all
-  sudo apt -y install moc meld ffmpeg inxi gedit-plugins tree
-  sudo apt -y install python python-pip openjdk-8-jdk python3 python3-pip
-  sudo apt -y install boinc-client boinc-manager
-  sudo apt -y install sl espeak arp-scan
-  sudo apt -y install compizconfig-settings-manager unity-tweak-tool
-  sudo apt-get -y install -f #fix any broken package requirements
+  declare -a INSTALLS=(
+                        # Repeat pre-installs
+                        "build-essential"
+                        "git"
+                        "wget"
+                        "libssl-dev"
+                        "libreadline-dev"
+                        "libncurses5-dev"
+                        "zlib1g-dev"
+                        "m4"
+                        "curl"
+                        "wx-common"
+                        "libwxgtk3.0-dev"
+                        "autoconf"
+                        # By PPA
+                        "atom"
+                        "google-chrome-stable"
+                        "esl-erlang"
+                        "elixir"
+                        "ffmpeg"
+                        "indicator-multiload"
+                        "mpv"
+                        "vlc"
+                        "nodejs"
+                        "ambiance-blackout-colors" #ambiance-blackout-aqua-pro
+                        # Basics
+                        "libc++1" #for Discord
+                        "vim"
+                        "gparted"
+                        "tmux"
+                        "inxi"
+                        "tree"
+                        # Networking
+                        "nmap"
+                        "arp-scan"
+                        "netcat"
+                        "whois"
+                        # LaTeX & Text stuff
+                        "texmaker"
+                        "texstudio"
+                        "texlive-math-extra"
+                        "texlive-science"
+                        "texlive-bibtex-extra"
+                        "biber"
+                        "latex-cjk-all"
+                        "meld"
+                        "gedit-plugins"
+                        # Media
+                        "moc"
+                        "lmms"
+                        "feh"
+                        "espeak"
+                        "kolourpaint4"
+                        # Python
+                        "python"
+                        "python3"
+                        "python-pip"
+                        "python3-pip"
+                        "openjdk-8"
+                        # Theme
+                        "compizconfig-settings-manager"
+                        "unity-tweak-tool"
+                        # Funny
+                        "sl"
+                        # Final Fix Check
+                        "-f"
+                      )
+  # do_apt $INSTALLS
 
-  #get discord here
-  wget -O discord-0.0.1.deb https://discordapp.com/api/download?platform=linux&format=deb
-  sudo dpkg -i discord-0.0.1.deb
-  rm discord-0.0.1.deb
+  # add i3
 
-  #unity-tweak-tool ambiance-blackout-aqua-pro
-  sudo add-apt-repository ppa:ravefinity-project/ppa
-  sudo apt -y update
-  sudo apt -y install ambiance-blackout-colors
+  # Discord
+  read -r -p "  ${YELLOW}Do you want to install Discord? [y/N]$DEFAULT " discord
+  if [[ "$discord" =~ ^([yY][eE][sS]|[yY])+$ ]]
+  then
+    wget -O discord-0.0.1.deb "https://discordapp.com/api/download?platform=linux&format=deb"
+    sudo dpkg -i discord-0.0.1.deb
+    rm discord-0.0.1.deb
+  fi
 
   echo " #- Doing pip Installs:"
-  sudo pip install youtube-dl
+  (sudo pip install youtube-dl && \
+    echo -e "$GOOD: youtube-dl INSTALLED")||\
+    echo -e "$FAIL:$GREEN youtube-dl$RED FAILED TO INSTALL$DEFAULT"
 
   echo " #- Doing npm Installs:"
-  sudo npm -g install http-server
+  (sudo npm -g install http-server && \
+    echo -e "$GOOD: http-serverl INSTALLED")||\
+    echo -e "$FAIL:$GREEN http-server$RED FAILED TO INSTALL$DEFAULT"
 
-
-
-  #add i3
-
-
-  echo " #- System Upgrade:"
+  echo "$YELLOW #- System Upgrade:$DEFAULT"
   sudo apt -y dist-upgrade
+  echo "$YELLOW #- Package Removals:$DEFAULT"
+  sudo apt purge thunderbird
+  sudo apt purge libreoffice-*
 
-  #add workspaces
+  # WORKSPACES
+  # add workspaces
   gsettings set org.compiz.core:/org/compiz/profiles/unity/plugins/core/ hsize 3
   gsettings set org.compiz.core:/org/compiz/profiles/unity/plugins/core/ vsize 2
-  #remove workspace switcher icon
+  # remove workspace switcher icon
   WRKSPC=$(gsettings get com.canonical.Unity.Launcher favorites |sed -e "s/'unity:\/\/expo-icon', //")
   gsettings set com.canonical.Unity.Launcher favorites "$WRKSPC"
-
-  echo " #- System Upgrade:"
-  sudo apt remove thunderbird
-  sudo apt remove libreoffice-*
 }
-# does basic initial installs on a ubuntu system
+
+
+# does basic initial installs on a Arch system
 function arch_install {
   echo " #- ARCH =>"
   echo " #- Adding PPAs:"
@@ -265,7 +358,7 @@ elif [ "$MODE" == "restore" ]; then
 ########################################
 elif [ "$MODE" == "install" ]; then
   #installs from sys information
-  echo " ## DOING INSTALLS ## "
+  echo "$YELLOW ## DOING INSTALLS ## $DEFAULT"
   TEMP="-$(uname -a)"
   if [[ $TEMP =~ Ubuntu ]]; then
     ubuntu_install
