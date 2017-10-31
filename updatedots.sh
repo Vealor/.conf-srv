@@ -267,7 +267,8 @@ function ubuntu_install {
                         "python3"
                         "python-pip"
                         "python3-pip"
-                        "openjdk-8"
+                        "openjdk-8-jdk"
+                        "openjdk-9-jdk"
                         # Theme
                         "compizconfig-settings-manager"
                         "unity-tweak-tool"
@@ -301,9 +302,14 @@ function ubuntu_install {
 
   echo "$YELLOW #- System Upgrade:$DEFAULT"
   sudo apt -y dist-upgrade
+
   echo "$YELLOW #- Package Removals:$DEFAULT"
-  sudo apt purge thunderbird
-  sudo apt purge libreoffice-*
+  read -r -p "  ${YELLOW}Do you want to remove packages? [y/N]$DEFAULT " rempak
+  if [[ "$rempak" =~ ^([yY][eE][sS]|[yY])+$ ]]
+  then
+    sudo apt purge thunderbird
+    sudo apt purge libreoffice-*
+  fi
 
   # WORKSPACES
   # add workspaces
