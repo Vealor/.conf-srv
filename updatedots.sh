@@ -241,6 +241,7 @@ function ubuntu_install {
                         "tmux"
                         "inxi"
                         "tree"
+                        "aptitude"
                         # Networking
                         "nmap"
                         "arp-scan"
@@ -271,7 +272,6 @@ function ubuntu_install {
                         "openjdk-9-jdk"
                         # Theme
                         "compizconfig-settings-manager"
-                        "unity-tweak-tool"
                         # Funny
                         "sl"
                         # Final Fix Check
