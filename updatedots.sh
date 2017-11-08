@@ -263,13 +263,15 @@ function ubuntu_install {
                         "feh"
                         "espeak"
                         "kolourpaint4"
+                        "inkscape"
                         # Python
                         "python"
                         "python3"
                         "python-pip"
                         "python3-pip"
+                        # Java
                         "openjdk-8-jdk"
-                        "openjdk-9-jdk"
+                        "openjdk-9-jdk" #might need to force overwrite headless
                         # Theme
                         "compizconfig-settings-manager"
                         # Funny
