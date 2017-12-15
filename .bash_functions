@@ -17,8 +17,6 @@ function starttwitch {
 _starttwitch() {
   local cur="${COMP_WORDS[COMP_CWORD]}"
   COMPREPLY=( $(compgen -W "$TWITCHSOURCES" -- ${cur}) )
-
-  unset TWITCHERS
   return 0
 }
 complete -F _starttwitch starttwitch #-o nospace
