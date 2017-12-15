@@ -24,6 +24,7 @@ _starttwitch() {
 complete -F _starttwitch starttwitch #-o nospace
 ################################################################################
 #weather
+WEATHERLOCATIONS="Victoria YYJ Vancouver Ottawa Nara Osaka KIX Kyoto"
 function getweather {
   curl -s wttr.in/$1 |egrep -v "Follow"|egrep -v "feature"
 }
@@ -34,6 +35,13 @@ function getweatherloop {
     sleep 300
   done
 }
+_weathercomplete() {
+  local cur="${COMP_WORDS[COMP_CWORD]}"
+  COMPREPLY=( $(compgen -W "$WEATHERLOCATIONS" -- ${cur}) )
+  return 0
+}
+complete -F _weathercomplete getweather
+complete -F _weathercompelte getweatherloop
 ################################################################################
 #youtube
 # TO DO:  add support for just end link for TY, add soundcloud? other?

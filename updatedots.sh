@@ -196,8 +196,6 @@ function ubuntu_install {
     sudo add-apt-repository -y ppa:indicator-multiload/stable-daily
     # mpv
     sudo add-apt-repository -y ppa:mc3man/mpv-tests
-    # vlc
-    sudo add-apt-repository -y ppa:videolan/master-daily
     # NodeJS and NPM
     curl -sL https://deb.nodesource.com/setup_6.x -o nodesource_setup.sh && \
     sudo bash nodesource_setup.sh
@@ -232,6 +230,7 @@ function ubuntu_install {
                         "indicator-multiload"
                         "mpv"
                         "vlc"
+                        "browser-plugin-vlc"
                         "nodejs"
                         "ambiance-blackout-colors" #ambiance-blackout-aqua-pro
                         # Basics
@@ -271,7 +270,6 @@ function ubuntu_install {
                         "python3-pip"
                         # Java
                         "openjdk-8-jdk"
-                        "openjdk-9-jdk" #might need to force overwrite headless
                         # Theme
                         "compizconfig-settings-manager"
                         # Funny
