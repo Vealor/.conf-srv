@@ -197,9 +197,7 @@ function ubuntu_install {
     # mpv
     sudo add-apt-repository -y ppa:mc3man/mpv-tests
     # NodeJS and NPM
-    curl -sL https://deb.nodesource.com/setup_6.x -o nodesource_setup.sh && \
-    sudo bash nodesource_setup.sh
-    rm nodesource_setup.sh
+    curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash -
     # Theme
     sudo add-apt-repository -y ppa:ravefinity-project/ppa
   else
