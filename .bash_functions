@@ -3,7 +3,7 @@
 ################################################################################
 #twitch
 
-TWITCHSOURCES="monstercat summit1g ZodiacOnFire alsatiak shroud "
+TWITCHSOURCES="monstercat summit1g ZodiacOnFire maddamesalsa shroud ArsonideX Demigodkinglol cerberuzsmiles TheHiveLeader jennavyr thecheezo Zizaran "
 function gettwitch {
   for TWITCHER in $TWITCHSOURCES; do
     echo "======== $TWITCHER >>>"
