@@ -17,6 +17,7 @@ alias cpusage="grep 'cpu ' /proc/stat | awk '{usage=(\$2+\$4)*100/(\$2+\$4+\$5)}
 alias power='upower -i /org/freedesktop/UPower/devices/battery_BAT0 | grep -E "state|to\ full|percentage"'
 alias syinfo='inxi -Fxz'
 alias tree='tree -CAuhF --dirsfirst'
+alias paths='sed "s/:/\n/g" <<< "$PATH"'
 alias treed='tree -CAFd'
 alias mkdir='mkdir -p'
 
