@@ -3,7 +3,7 @@
 ################################################################################
 #twitch
 
-TWITCHSOURCES="monstercat summit1g ZodiacOnFire alsatiak shroud "
+TWITCHSOURCES="monstercat summit1g ZodiacOnFire maddamesalsa shroud ArsonideX Demigodkinglol cerberuzsmiles TheHiveLeader jennavyr thecheezo Zizaran "
 function gettwitch {
   for TWITCHER in $TWITCHSOURCES; do
     echo "======== $TWITCHER >>>"
@@ -17,13 +17,12 @@ function starttwitch {
 _starttwitch() {
   local cur="${COMP_WORDS[COMP_CWORD]}"
   COMPREPLY=( $(compgen -W "$TWITCHSOURCES" -- ${cur}) )
-
-  unset TWITCHERS
   return 0
 }
 complete -F _starttwitch starttwitch #-o nospace
 ################################################################################
 #weather
+WEATHERLOCATIONS="Victoria YYJ Vancouver Ottawa Nara Osaka KIX Kyoto"
 function getweather {
   curl -s wttr.in/$1 |egrep -v "Follow"|egrep -v "feature"
 }
@@ -34,6 +33,13 @@ function getweatherloop {
     sleep 300
   done
 }
+_weathercomplete() {
+  local cur="${COMP_WORDS[COMP_CWORD]}"
+  COMPREPLY=( $(compgen -W "$WEATHERLOCATIONS" -- ${cur}) )
+  return 0
+}
+complete -F _weathercomplete getweather
+complete -F _weathercompelte getweatherloop
 ################################################################################
 #youtube
 # TO DO:  add support for just end link for TY, add soundcloud? other?
@@ -51,6 +57,11 @@ function sensorloop {
     sensors
     sleep 2
   done
+}
+################################################################################
+#input
+function doclick {
+  xdotool click --repeat $1 --delay 1 1
 }
 ################################################################################
 ################################################################################
