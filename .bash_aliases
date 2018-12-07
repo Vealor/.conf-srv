@@ -5,6 +5,9 @@
 alias shut="sudo shutdown -h now"
 alias reboot="sudo shutdown -r now"
 
+#git
+alias gitme='git commit --author="Vealor <jakob.m.roberts@gmail.com>" -a -m '
+
 #networking
 alias myip="curl ipecho.net/plain ; echo"
 alias localip="ifconfig | sed -En 's/127.0.0.1//;s/.*inet (addr:)?(([0-9]*\.){3}[0-9]*).*/\2/p'"

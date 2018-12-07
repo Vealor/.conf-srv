@@ -197,7 +197,7 @@ function ubuntu_install {
     # mpv
     sudo add-apt-repository -y ppa:mc3man/mpv-tests
     # NodeJS and NPM
-    curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash -
+    curl -sL https://deb.nodesource.com/setup_10.x | sudo bash -
     # Theme
     sudo add-apt-repository -y ppa:ravefinity-project/ppa
   else
@@ -264,8 +264,6 @@ function ubuntu_install {
                         # Python
                         "python"
                         "python3"
-                        "python-pip"
-                        "python3-pip"
                         # Java
                         "openjdk-8-jdk"
                         # Theme
@@ -276,6 +274,10 @@ function ubuntu_install {
                         "-f"
                       )
   do_apt $INSTALLS
+
+  # python's pip, pip2, pip3 installs - pip is python3
+  curl -sS https://bootstrap.pypa.io/get-pip.py | sudo python
+  curl -sS https://bootstrap.pypa.io/get-pip.py | sudo python3
 
   # add i3
 
