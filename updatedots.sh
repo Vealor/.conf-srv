@@ -352,6 +352,9 @@ if [ "$MODE" == "create" ]; then
   dot_makeolddir
   # main create function
   dot_create
+
+  echo -e "Please check mocp, there may be a config permission problem resolved with chmod 644"
+  echo -e "It is recommended to now restart!"
 ########################################
 elif [ "$MODE" == "restore" ]; then
   #test if the olddir already exists to prevent overwrite
@@ -373,6 +376,9 @@ elif [ "$MODE" == "install" ]; then
   else
     echo " # System not compatible with given installs"
   fi
+
+  echo -e "Please check mocp, there may be a config permission problem resolved with chmod 644"
+  echo -e "It is recommended to now restart!"
 ########################################
 elif [ "$MODE" == "update" ]; then
   #installs from sys information
@@ -394,6 +400,9 @@ elif [ "$MODE" == "update" ]; then
   else
     echo -e "$FAIL\tOld dotfile directory does not exist or match!"
   fi
+
+  echo -e "Please check mocp, there may be a config permission problem resolved with chmod 644"
+  echo -e "It is recommended to now restart!"
 ########################################
 else
   echo -e "~~~ \e[33mUSAGE:\e[39m ~~~"
@@ -403,6 +412,4 @@ else
   echo -e "\e[93mbash updatedots.sh update  # updates new dotfiles from github\e[39m"
 fi
 echo -e "$LINE"
-echo -e "Please check mocp, there may be a config permission problem resolved with chmod 644"
-echo -e "It is recommended to now restart!"
 ################################################################################

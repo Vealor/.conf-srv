@@ -6,7 +6,7 @@ alias shut="sudo shutdown -h now"
 alias reboot="sudo shutdown -r now"
 
 #git
-alias gitme='git commit --author="Vealor <jakob.m.roberts@gmail.com>" -a -m '
+alias gitveal='pushd ~/.dotfiles && git config user.name Vealor && git config user.email jakob.m.roberts@gmail.com && popd'
 
 #networking
 alias myip="curl ipecho.net/plain ; echo"
