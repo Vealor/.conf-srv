@@ -49,6 +49,31 @@ function ytm { #music
 function ytv { #video
   mpv $1 --autofit-larger=50%x50% &
 }
+MPLAYCOUNT="1 2 3"
+function mplay {
+  mplaylink=""
+  case $1 in
+    1 )
+      mplaylink="https://www.youtube.com/watch?v=2PA6JBhUhn8" ;;
+    2 )
+      mplaylink="https://www.youtube.com/watch?v=Vhn73idb7Jg" ;;
+    3 )
+      mplaylink="https://www.youtube.com/watch?v=b9EqnSrswEU" ;;
+    * )
+      mplaylink="" ;;
+  esac
+  if [ -z "$mplaylink" ]; then
+    printf "\033[0;31mNo fav song specified\033[0m\n"
+  else
+    ytm $mplaylink
+  fi
+}
+_mplaycomplete() {
+  local cur="${COMP_WORDS[COMP_CWORD]}"
+  COMPREPLY=( $(compgen -W "$MPLAYCOUNT" -- ${cur}) )
+  return 0
+}
+complete -F _mplaycomplete mplay
 ################################################################################
 #sensors
 function sensorloop {
