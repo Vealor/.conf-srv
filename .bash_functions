@@ -49,6 +49,15 @@ function ytm { #music
 function ytv { #video
   mpv $1 --autofit-larger=50%x50% &
 }
+function ytplay {
+  YTSEARCHSTRING="${@}"
+  YTSEARCHSTRING=${YTSEARCHSTRING// /\%}
+  echo $YTSEARCHSTRING
+  YTLINK=`curl -s https://www.youtube.com/results\?search_query\=$YTSEARCHSTRING| grep -o -m 1 \/watch\?v=.*\"\ c| awk -F'[="]' '{print $2}'`
+  echo $YTLINK
+  echo "https://www.youtube.com/watch?v=$YTLINK"
+  mpv "https://www.youtube.com/watch?v=$YTLINK" --autofit-larger=20%x20% &
+}
 MPLAYCOUNT="1 2 3"
 function mplay {
   mplaylink=""
