@@ -44,17 +44,59 @@ complete -F _weathercompelte getweatherloop
 #youtube
 # TO DO:  add support for just end link for TY, add soundcloud? other?
 function ytm { #music
-  mpv $1 --loop-playlist=inf --autofit-larger=30%x30% &
+  mpv $1 --loop-playlist=inf --autofit-larger=30%x30% &>/dev/null &
 }
 function ytv { #video
-  mpv $1 --autofit-larger=50%x50% &
+  mpv $1 --autofit-larger=50%x50% &>/dev/null &
 }
 function ytplay {
   YTSEARCHSTRING="${@}"
-  YTSEARCHSTRING=${YTSEARCHSTRING// /\%}
+  YTSEARCHSTRING=${YTSEARCHSTRING// /\+}
   YTLINK=`curl -s https://www.youtube.com/results\?search_query\=$YTSEARCHSTRING| grep -o -m 1 \/watch\?v=.*\"\ c| awk -F'[="]' '{print $2}'`
-  mpv "https://www.youtube.com/watch?v=$YTLINK" --autofit-larger=20%x20% &
+  mpv "https://www.youtube.com/watch?v=$YTLINK" --autofit-larger=20%x20% &>/dev/null &
 }
+PL=()
+PLCURR=""
+PLKILL=0
+# function ytlist {
+#   # if $1 not in list add remove
+#   # printf "\033[0;31mSpecify correct command from list:\n- List\n- Add\n- Remove\033[0m\n"
+#   # list add remove
+#   # if add
+#   # PL+=("thing")
+#   # if list
+#   # for item in "${PL[]}"; do echo $item; done
+# }
+# function ytplaylist {
+#   #if $1 not in command list
+#
+#   # to loop.  if empty, put PLCURR to empty
+#   if [ $YTPLAYLISTSTATUS -eq 0 ]; then
+#     YTPLAYLISTSTATUS=1
+#     while true; do
+#       if [ ${PL[@]} -eq 0 ] || [ $PLKILL -eq 1 ]; then
+#           YTPLAYLISTSTATUS=0
+#           break
+#           PLKILL=0
+#       elif []
+#           echo "Oops, something went wrong..."
+#       fi
+#       #if empty
+#         #done
+#         # YTPLAYLISTSTATUS=0
+#       #if kill condition
+#         #reset kill condition
+#       #get next in array, get PID and play and wait
+#
+#     done &
+#   else
+#     printf "\033[0;31mPlaylist already running!\033[0m\n"
+#   done
+#
+#
+# }
+# function ytplaylist
+
 MPLAYCOUNT="1 2 3"
 function mplay {
   mplaylink=""
