@@ -275,11 +275,42 @@ function ubuntu_install {
                       )
   do_apt $INSTALLS
 
-  # python's pip, pip2, pip3 installs - pip is python3
+  # python's pip, pip2, pip3 installs
   curl -sS https://bootstrap.pypa.io/get-pip.py | sudo python
   curl -sS https://bootstrap.pypa.io/get-pip.py | sudo python3
 
   # add i3
+
+  # Atom APM INSTALLS
+  apm install atom-beautify\
+              atom-bootstrap3\
+              atom-django\
+              atom-elixir\
+              atom-jade\
+              build\
+              busy\
+              busy-signal\
+              color-picker\
+              file-icons\
+              git-blame\
+              gitlab\
+              highlight-selected\
+              intentions\
+              language-elixir\
+              language-ini\
+              linter\
+              linter-elixirc\
+              linter-eslint\
+              linter-gcc\
+              linter-ui-default\
+              markdown-preview-enhanced\
+              minimap\
+              pdf-view\
+              pigments\
+              pretty-json\
+              project-manager\
+              script\
+              terminal-plus
 
   # Discord
   read -r -p "  ${YELLOW}Do you want to install Discord? [y/N]$DEFAULT " discord
