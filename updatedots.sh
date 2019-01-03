@@ -161,7 +161,7 @@ function ubuntu_install {
   then
     echo " #- Adding PPAs:"
     # pre-installs
-    declare -a PREINSTALLS=(
+    declare -a INSTALLS=(
                           "build-essential"
                           "git"
                           "wget"
@@ -175,7 +175,7 @@ function ubuntu_install {
                           "libwxgtk3.0-dev"
                           "autoconf"
                         )
-    do_apt $PREINSTALLS
+    do_apt $INSTALLS
     # Core
     sudo add-apt-repository "deb http://archive.ubuntu.com/ubuntu \
       $(lsb_release -sc) main universe restricted multiverse"
