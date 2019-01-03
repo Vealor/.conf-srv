@@ -322,9 +322,19 @@ function ubuntu_install {
   fi
 
   echo " #- Doing pip Installs:"
-  (sudo pip install youtube-dl && \
+  sudo python3 -m pip install --upgrade pip
+  (sudo pip3 install youtube-dl && \
     echo -e "$GOOD: youtube-dl INSTALLED")||\
     echo -e "$FAIL:$GREEN youtube-dl$RED FAILED TO INSTALL$DEFAULT"
+  (sudo pip3 install pandas && \
+    echo -e "$GOOD: pandas INSTALLED")||\
+    echo -e "$FAIL:$GREEN pandas$RED FAILED TO INSTALL$DEFAULT"
+  (sudo pip3 install pyxlsb && \
+    echo -e "$GOOD: pyxlsb INSTALLED")||\
+    echo -e "$FAIL:$GREEN pyxlsb$RED FAILED TO INSTALL$DEFAULT"
+  (sudo pip3 install jupyter && \
+    echo -e "$GOOD: jupyter INSTALLED")||\
+    echo -e "$FAIL:$GREEN jupyter$RED FAILED TO INSTALL$DEFAULT"
 
   echo " #- Doing npm Installs:"
   (sudo npm -g install http-server && \
