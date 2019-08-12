@@ -11,7 +11,7 @@
 #
 ################################################################################
 # list of files/folders to symlink in homedir
-FILES=".moc .bash_aliases .bash_functions .bash_sysspec .bashrc .gitconfig .tmux.conf .vimrc"
+FILES=".moc .bash_aliases .bash_functions .bash_profile .bash_sysspec .bashrc .gitconfig .tmux.conf .vimrc"
 
 DIR=~/.dotfiles         # dotfiles directory
 OLDDIR=~/.dotfiles/.dotfiles_old  # old dotfiles backup directory
@@ -363,16 +363,18 @@ function ubuntu_install {
 
 
 # does basic initial installs on a Arch system
-function arch_install {
-  echo " #- ARCH =>"
-  echo " #- Adding PPAs:"
+function install {
+  echo "$GREEN #- PACMAN INSTALLS:$DEFAULT"
+  sudo pacman -Syyu pamac-gtk pamac-cli pamac-tray-appindicator
+  echo "$GREEN #- PAMAC DEFAULT INSTALLS:$DEFAULT"
+  pamac install atom tmux kolourpaint htop nmap bash-completion mpv xclip vim --no-confirm
+  echo "$GREEN #- PAMAC AUR INSTALLS:$DEFAULT"
+  pamac build google-chrome --no-confirm
 
-  echo " #- Doing pacman Installs:"
-
-  echo " #- Doing pip Installs:"
-
-  echo " #- System Upgrade:"
-
+  echo "$GREEN #- UPDATE PACMAN:$DEFAULT"
+  sudo pacman -Syyu
+  echo "$GREEN #- UPDATE PAMAC:$DEFAULT"
+  pamac update
 }
 ################################################################################
 ################################################################################
@@ -410,10 +412,8 @@ elif [ "$MODE" == "install" ]; then
   #installs from sys information
   echo "$YELLOW ## DOING INSTALLS ## $DEFAULT"
   TEMP="-$(uname -a)"
-  if [[ $TEMP =~ Ubuntu ]]; then
-    ubuntu_install
-  elif [[ $TEMP =~ Arch ]]; then
-    arch_install
+  if [[ $TEMP =~ MANJARO ]]; then
+    install
   else
     echo " # System not compatible with given installs"
   fi
