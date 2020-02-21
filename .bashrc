@@ -41,6 +41,7 @@ PROMPT_COMMAND='history -a'
 export HISTFILESIZE=10000
 export HISTSIZE=10000
 export SAVEHIST=10000
+export HISTTIMEFORMAT="%F %T "
 # Set the default editor
 export EDITOR='vim'
 export VISUAL='vim'
