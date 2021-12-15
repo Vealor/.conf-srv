@@ -1,0 +1,63 @@
+[init]
+	defaultBranch = main
+[core]
+  editor        = vim
+  whitespace    = off
+  excludesfile  = ~/.gitignore.global
+[pager]
+  branch = false
+[credential]
+  helper = cache --timeout=3600
+[merge]
+  tool = splice
+  conflictstyle = diff3
+[mergetool]
+  keepBackup = false
+[mergetool "splice"]
+  cmd = "vim -f $BASE $LOCAL $REMOTE $MERGED -c 'SpliceInit'"
+  trustExitCode = true
+[user]
+  name  = Vealor
+  email = jakob.m.roberts@gmail.com
+[github]
+  user = vealor
+[alias]
+  a = add
+  b = branch
+  s = status
+[rebase]
+  autosquash = true
+[color]
+  branch      = auto
+  diff        = auto
+  status      = auto
+  ui          = true
+[color "branch"]
+  current     = yellow reverse
+  local       = yellow
+  remote      = green
+[color "diff"]
+  meta        = yellow bold
+  frag        = magenta bold
+  old         = red bold
+  new         = green bold
+  commit      = cyan
+  whitespace  = red reverse
+[color "status"]
+  added       = green
+  changed     = yellow
+  untracked   = magenta
+  deleted     = red
+  header      = cyan bold
+[color "diff-highlight"]
+  oldNormal = red
+  oldHighlight = red reverse
+  newNormal = green
+  newHighlight = green reverse
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[pull]
+	rebase = false
