@@ -4,7 +4,7 @@ sudo apt update
 sudo apt dist-upgrade -y
 
 # installs
-sudo apt -y install stow vim feh git ssh wget build-essential curl vlc mpv gparted tmux tree nmap netcat whois meld default-jdk mocp xdotool
+sudo apt -y install stow vim feh git ssh wget build-essential curl vlc mpv gparted tmux tree nmap netcat whois meld default-jdk moc xdotool
 
 # NVM
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
